@@ -5,8 +5,8 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "my-vlfm"
 version = "0.1.0"
-description = "Top-layer orchestration package built on top of vlfm"
+description = "Standalone orchestration package for semantic navigation"
 requires-python = ">=3.9"
 
 [tool.setuptools]
-packages = ["my_vlfm", "my_vlfm.my_vlfm"]
+packages = ["my_vlfm"]

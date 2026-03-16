@@ -1,8 +1,9 @@
+import importlib
+
 import numpy as np
 
 from my_vlfm import NavigationState, NavigationStateMachine, SemanticMap
 from my_vlfm.language_parser import LanguageParser
-from vlfm.integration import LanguageParser as CompatLanguageParser
 
 
 def test_language_parser_basic_and_relational() -> None:
@@ -55,6 +56,7 @@ def test_navigation_state_machine_failed_when_no_target() -> None:
 
 
 def test_vlfm_integration_compatibility_layer() -> None:
-    compat = CompatLanguageParser()
-    parsed = compat.parse("go to the desk")
+    mod = importlib.import_module("vlfm.integration")
+    parser = mod.LanguageParser()
+    parsed = parser.parse("go to the desk")
     assert parsed.target_object == "desk"

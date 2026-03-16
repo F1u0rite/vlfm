@@ -1,17 +1,29 @@
 # my_vlfm
 
-`my_vlfm` 是面向任务编排的上层语义导航仓库（repo-style 目录）。
+`my_vlfm` 是一个可单独使用的上层语义导航包，负责：
 
-- `vlfm` 作为底层能力库（感知/地图/策略基础组件）
-- `my_vlfm` 作为上层任务接口（语言解析、语义查询、目标点生成、路径规划、状态机）
+- 语言指令解析
+- 语义地图查询
+- 目标点生成
+- A* 路径规划
+- 导航状态机编排
+
+`my_vlfm` 以上层编排为主，建议在 `vlfm` 环境中使用；同时保留 `vlfm.integration` 兼容导出，便于把它作为 vlfm 的半重构上层。
+
+## 快速使用
+
+```python
+from my_vlfm import NavigationStateMachine, SemanticMap
+```
 
 ## 目录
 
-- `my_vlfm/`：核心 Python 包
-- `tests/`：上层逻辑测试
-- `docs/`：架构说明
+- `my_vlfm/*.py`：核心模块
+- `tests/`：包级测试
+- `docs/architecture.md`：架构说明
 
 ## 与 vlfm 的关系
 
-当前工程中 `vlfm.integration` 已改为兼容接口层，内部转发到 `my_vlfm`。
-这样可以把 `vlfm` 当底层库使用，同时将任务逻辑集中在 `my_vlfm`。
+- `vlfm` 作为底层能力与历史接口
+- `my_vlfm` 作为上层语义任务编排
+- 通过 `vlfm.integration` 兼容层可继续按 `vlfm` 路径使用新能力

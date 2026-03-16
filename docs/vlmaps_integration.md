@@ -1,14 +1,15 @@
-# VLMaps 接入 VLFM 的输入输出与模块边界
+# VLMaps 接入方案：my_vlfm 输入输出与模块边界
 
 本文档定义一个可落地的最小集成方案：`语言指令 -> 语义查询 -> 目标点生成 -> A*路径规划 -> 导航状态输出`。
 
-## 架构调整（按你的要求）
+## 架构
 
-- 新上层仓库（repo-style）：`my_vlfm/`
+- 上层独立包：`my_vlfm/`
   - 放置任务编排逻辑与输入输出定义
-- 现有底层库：`vlfm/`
-  - 作为底层接口使用
-  - `vlfm.integration` 仅保留兼容转发层（调用 `my_vlfm`）
+- 底层能力：`vlfm/`
+  - 提供已有感知/导航相关环境与组件（可选复用）
+
+> 推荐模式：`vlfm` 作为底层，`my_vlfm` 作为上层；并通过 `vlfm.integration` 对外提供兼容接口。
 
 ## 输入定义
 
@@ -32,21 +33,17 @@
 4. **规划路径**
    - waypoints 列表（地图坐标系）
 
-## 对应代码模块
+## 对应代码模块（my_vlfm）
 
-- 上层实现（主）：
-  - `my_vlfm/my_vlfm/language_parser.py`
-  - `my_vlfm/my_vlfm/semantic_map.py`
-  - `my_vlfm/my_vlfm/goal_selector.py`
-  - `my_vlfm/my_vlfm/planner.py`
-  - `my_vlfm/my_vlfm/navigation_state_machine.py`
-- 兼容接口（底层库对外门面）：
-  - `vlfm/integration/*.py`（全部转发到 `my_vlfm`）
+- `my_vlfm/language_parser.py`
+- `my_vlfm/semantic_map.py`
+- `my_vlfm/goal_selector.py`
+- `my_vlfm/planner.py`
+- `my_vlfm/navigation_state_machine.py`
 
 ## 设计原则
 
 - **上层（my_vlfm）决定去哪（语义目标）**
 - **规划器（A* / Nav2）决定怎么去（几何路径）**
-- **底层（vlfm）提供能力基座与兼容接口**
 
-这样可以把任务逻辑和底层能力分离，便于后续独立维护 `my_vlfm`。
+这样可以把任务逻辑和底层能力分离，便于独立维护。

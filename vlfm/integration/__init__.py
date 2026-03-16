@@ -1,10 +1,6 @@
-"""Compatibility layer.
+"""Compatibility layer from vlfm to my_vlfm orchestration modules."""
 
-`vlfm.integration` is kept as a thin interface so existing code keeps working,
-while implementation now lives in `my_vlfm`.
-"""
-
-from my_vlfm import (  # type: ignore
+from my_vlfm import (
     AStarPlanner,
     GoalSelectionError,
     GoalSelector,

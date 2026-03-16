@@ -1,8 +1,9 @@
 # my_vlfm 架构
 
 ## 定位
-- `my_vlfm`：上层任务编排仓库
-- `vlfm`：底层能力库（被上层调用）
+- `vlfm`：底层能力库
+- `my_vlfm`：上层任务编排包
+- `vlfm.integration`：兼容门面，转发到 `my_vlfm`
 
 ## 处理链路
 1. `LanguageParser`
@@ -11,7 +12,9 @@
 4. `AStarPlanner`
 5. `NavigationStateMachine` 输出状态
 
-## 兼容策略
-为了不影响旧代码：
-- `vlfm.integration` 仍可 import
-- 但内部实现全部转发到 `my_vlfm`
+## 模块
+- `language_parser.py`
+- `semantic_map.py`
+- `goal_selector.py`
+- `planner.py`
+- `navigation_state_machine.py`
