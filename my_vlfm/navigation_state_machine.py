@@ -31,11 +31,23 @@ class NavigationResult:
 class NavigationStateMachine:
     """Orchestrates language parsing, semantic lookup, goal selection and A*."""
 
-    def __init__(self, semantic_map: SemanticMap, occupancy_grid: np.ndarray, meters_per_cell: float = 0.1) -> None:
+    def __init__(
+        self,
+        semantic_map: SemanticMap,
+        occupancy_grid: np.ndarray,
+        meters_per_cell: float = 0.1,
+        free_value: int = 0,
+        unknown_value: int = 2,
+    ) -> None:
         self._parser = LanguageParser()
         self._semantic_map = semantic_map
-        self._goal_selector = GoalSelector(occupancy_grid, meters_per_cell=meters_per_cell)
-        self._planner = AStarPlanner(occupancy_grid, meters_per_cell=meters_per_cell)
+        self._goal_selector = GoalSelector(occupancy_grid, meters_per_cell=meters_per_cell, free_value=free_value)
+        self._planner = AStarPlanner(
+            occupancy_grid,
+            meters_per_cell=meters_per_cell,
+            free_value=free_value,
+            unknown_value=unknown_value,
+        )
 
     def run(self, instruction: str, robot_xy: Tuple[float, float], arrival_tolerance_m: float = 0.25) -> NavigationResult:
         parsed = self._parser.parse(instruction)

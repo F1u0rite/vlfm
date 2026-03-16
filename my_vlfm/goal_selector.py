@@ -12,11 +12,12 @@ class GoalSelectionError(RuntimeError):
 class GoalSelector:
     """Converts semantic regions into a reachable 2D navigation goal."""
 
-    def __init__(self, occupancy_grid: np.ndarray, meters_per_cell: float = 0.1) -> None:
+    def __init__(self, occupancy_grid: np.ndarray, meters_per_cell: float = 0.1, free_value: int = 0) -> None:
         if occupancy_grid.ndim != 2:
             raise ValueError("occupancy_grid must be a 2D array.")
         self._grid = occupancy_grid
         self._m_per_cell = meters_per_cell
+        self._free_value = int(free_value)
 
     def select_goal(self, region: SemanticRegion, max_radius_cells: int = 10) -> Tuple[float, float]:
         center = region.centroid
@@ -35,7 +36,7 @@ class GoalSelector:
     def _is_free(self, row: int, col: int) -> bool:
         if row < 0 or col < 0 or row >= self._grid.shape[0] or col >= self._grid.shape[1]:
             return False
-        return int(self._grid[row, col]) == 0
+        return int(self._grid[row, col]) == self._free_value
 
     @staticmethod
     def _ring_cells(center: Tuple[int, int], radius: int) -> Tuple[Tuple[int, int], ...]:

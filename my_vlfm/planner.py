@@ -17,12 +17,21 @@ class AStarPlanner:
     - 2: unknown (treated as blocked by default)
     """
 
-    def __init__(self, occupancy_grid: np.ndarray, meters_per_cell: float = 0.1, allow_unknown: bool = False) -> None:
+    def __init__(
+        self,
+        occupancy_grid: np.ndarray,
+        meters_per_cell: float = 0.1,
+        allow_unknown: bool = False,
+        free_value: int = 0,
+        unknown_value: int = 2,
+    ) -> None:
         if occupancy_grid.ndim != 2:
             raise ValueError("occupancy_grid must be 2D.")
         self._grid = occupancy_grid
         self._m_per_cell = meters_per_cell
         self._allow_unknown = allow_unknown
+        self._free_value = int(free_value)
+        self._unknown_value = int(unknown_value)
 
     def plan(self, start_xy: Tuple[float, float], goal_xy: Tuple[float, float]) -> List[Tuple[float, float]]:
         start = self._xy_to_cell(start_xy)
@@ -76,9 +85,9 @@ class AStarPlanner:
         if r < 0 or c < 0 or r >= self._grid.shape[0] or c >= self._grid.shape[1]:
             return False
         value = int(self._grid[r, c])
-        if value == 0:
+        if value == self._free_value:
             return True
-        if value == 2:
+        if value == self._unknown_value:
             return self._allow_unknown
         return False
 

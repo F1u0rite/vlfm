@@ -12,6 +12,12 @@ from my_vlfm import (
     PlanningError,
     SemanticMap,
     SemanticRegion,
+    MapMetadata,
+    SceneExportBundle,
+    infer_occupancy_labels,
+    load_map_metadata,
+    load_scene_export,
+    load_semantic_map,
 )
 
 __all__ = [
@@ -26,4 +32,10 @@ __all__ = [
     "PlanningError",
     "SemanticMap",
     "SemanticRegion",
+    "MapMetadata",
+    "SceneExportBundle",
+    "infer_occupancy_labels",
+    "load_map_metadata",
+    "load_scene_export",
+    "load_semantic_map",
 ]

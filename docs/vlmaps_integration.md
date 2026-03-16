@@ -4,37 +4,53 @@
 
 ## 架构
 
-- 上层独立包：`my_vlfm/`
-  - 放置任务编排逻辑与输入输出定义
+- 上层包：`my_vlfm/`
 - 底层能力：`vlfm/`
-  - 提供已有感知/导航相关环境与组件（可选复用）
+- 兼容接口：`vlfm.integration`（转发到 `my_vlfm`）
 
-> 推荐模式：`vlfm` 作为底层，`my_vlfm` 作为上层；并通过 `vlfm.integration` 对外提供兼容接口。
+## 你的 `scene_export/` 目录（已适配）
+
+```text
+scene_export/
+├─ occupancy_map.npy
+├─ occupancy_map.png
+├─ semantic_objects.json
+├─ semantic_points.json
+├─ topdown_rgb_map.png
+├─ map_metadata.json
+└─ export_readme.txt
+```
+
+`my_vlfm.scene_export` 可直接读取：
+- `load_scene_export(scene_export_dir)`：读取 metadata + occupancy + semantic map
+- `infer_occupancy_labels(metadata)`：从 `occupancy_label_def` 推断 free/unknown 编码
 
 ## 输入定义
 
-1. **自然语言指令**
-   - 示例：`go to the chair near the door`
-2. **机器人位姿**
-   - 2D：`(x, y, yaw)`（当前状态机使用 `(x, y)` 做路径规划）
-3. **语义地图（VLMaps）**
-   - 每个语义区域包含 `category` 与 `Nx2` 地图坐标点集
-4. **占据栅格地图**
-   - `0=free, 1=obstacle, 2=unknown`
+1. 自然语言指令（如 `go to the chair near the door`）
+2. 机器人位姿（当前状态机使用 `(x, y)`）
+3. 语义地图（由 `semantic_objects.json` 或 `semantic_points.json` 读取）
+4. 占据栅格（`occupancy_map.npy`）
 
 ## 输出定义
 
-1. **目标语义区域**
-   - 被选中的 `SemanticRegion`
-2. **导航目标点**
-   - `goal_point: (x_goal, y_goal)`
-3. **导航状态**
-   - `searching / goal selected / path planned / arrived / failed`
-4. **规划路径**
-   - waypoints 列表（地图坐标系）
+1. 目标语义区域（`SemanticRegion`）
+2. 导航目标点（`goal_point: (x_goal, y_goal)`）
+3. 导航状态（`path planned / arrived / failed`）
+4. 规划路径（waypoints）
+
+## 关键编码兼容
+
+你的规范里 occupancy 编码是：
+- `0 = obstacle`
+- `1 = free`
+- `2 = unknown`
+
+`my_vlfm` 的 `AStarPlanner` / `GoalSelector` 现已支持 `free_value`、`unknown_value` 参数，因此可直接对齐该编码。
 
 ## 对应代码模块（my_vlfm）
 
+- `my_vlfm/scene_export.py`（读取 scene_export）
 - `my_vlfm/language_parser.py`
 - `my_vlfm/semantic_map.py`
 - `my_vlfm/goal_selector.py`
@@ -43,7 +59,6 @@
 
 ## 设计原则
 
-- **上层（my_vlfm）决定去哪（语义目标）**
-- **规划器（A* / Nav2）决定怎么去（几何路径）**
-
-这样可以把任务逻辑和底层能力分离，便于独立维护。
+- 上层（my_vlfm）决定去哪（语义目标）
+- 规划器（A* / Nav2）决定怎么去（几何路径）
+- 底层（vlfm）提供能力基座与兼容入口
