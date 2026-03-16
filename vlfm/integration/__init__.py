@@ -1,0 +1,41 @@
+"""Compatibility layer from vlfm to my_vlfm orchestration modules."""
+
+from my_vlfm import (
+    AStarPlanner,
+    GoalSelectionError,
+    GoalSelector,
+    LanguageParser,
+    NavigationResult,
+    NavigationState,
+    NavigationStateMachine,
+    ParsedInstruction,
+    PlanningError,
+    SemanticMap,
+    SemanticRegion,
+    MapMetadata,
+    SceneExportBundle,
+    infer_occupancy_labels,
+    load_map_metadata,
+    load_scene_export,
+    load_semantic_map,
+)
+
+__all__ = [
+    "AStarPlanner",
+    "GoalSelectionError",
+    "GoalSelector",
+    "LanguageParser",
+    "NavigationResult",
+    "NavigationState",
+    "NavigationStateMachine",
+    "ParsedInstruction",
+    "PlanningError",
+    "SemanticMap",
+    "SemanticRegion",
+    "MapMetadata",
+    "SceneExportBundle",
+    "infer_occupancy_labels",
+    "load_map_metadata",
+    "load_scene_export",
+    "load_semantic_map",
+]
