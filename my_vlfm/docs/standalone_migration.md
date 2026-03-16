@@ -1,32 +1,15 @@
-# 将 `my_vlfm` 拆分为独立仓库（推荐流程）
+# `my_vlfm` 迁移说明（在 vlfm 基座上使用）
 
-下面是把当前目录中的 `my_vlfm/` 迁移成独立仓库的最小步骤。
+如果你要把 `my_vlfm` 单独做仓库，推荐仍将其定位为 **vlfm 上层编排**：
 
-## 1. 创建新仓库并复制目录
+- 运行环境沿用 `vlfm` 依赖
+- `vlfm` 保留为底层能力
+- `vlfm.integration` 作为兼容门面
 
-```bash
-mkdir -p ~/my_vlfm_repo
-cp -r /path/to/vlfm/my_vlfm/* ~/my_vlfm_repo/
-cd ~/my_vlfm_repo
-```
+## 推荐做法
 
-## 2. 初始化 git（如果是全新仓库）
+1. 在新仓库维护 `my_vlfm` 代码。
+2. 在部署环境里同时安装 `vlfm` 与 `my_vlfm`。
+3. 对历史调用方继续提供 `vlfm.integration` 导出（通过简单转发实现）。
 
-```bash
-git init
-git add .
-git commit -m "Initial standalone my_vlfm package"
-```
-
-## 3. 安装并验证
-
-```bash
-pip install -e .
-python -c "from my_vlfm import NavigationStateMachine, SemanticMap; print('ok')"
-```
-
-## 4. 与 vlfm 的关系
-
-- `my_vlfm` 可以独立运行。
-- 若你希望复用 `vlfm` 的底层能力，只需在同一 Python 环境中安装 `vlfm` 即可。
-- 不再依赖 `vlfm.integration`（该层已删除）。
+这样能体现“半重构 vlfm”：上层重构、底层保留。

@@ -55,9 +55,8 @@ def test_navigation_state_machine_failed_when_no_target() -> None:
     assert "No semantic target region" in result.message
 
 
-def test_vlfm_integration_removed() -> None:
-    try:
-        importlib.import_module("vlfm.integration")
-        assert False, "vlfm.integration should not exist after decoupling"
-    except ModuleNotFoundError:
-        assert True
+def test_vlfm_integration_compatibility_layer() -> None:
+    mod = importlib.import_module("vlfm.integration")
+    parser = mod.LanguageParser()
+    parsed = parser.parse("go to the desk")
+    assert parsed.target_object == "desk"

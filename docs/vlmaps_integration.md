@@ -9,7 +9,7 @@
 - 底层能力：`vlfm/`
   - 提供已有感知/导航相关环境与组件（可选复用）
 
-> `my_vlfm` 本身可独立使用，不依赖 `vlfm.integration`。
+> 推荐模式：`vlfm` 作为底层，`my_vlfm` 作为上层；并通过 `vlfm.integration` 对外提供兼容接口。
 
 ## 输入定义
 

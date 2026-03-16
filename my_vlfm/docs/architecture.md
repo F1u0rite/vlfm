@@ -1,8 +1,9 @@
 # my_vlfm 架构
 
 ## 定位
-- `my_vlfm`：上层任务编排包（可独立）
-- 可在 `vlfm` 环境中运行，但不依赖 `vlfm.integration`
+- `vlfm`：底层能力库
+- `my_vlfm`：上层任务编排包
+- `vlfm.integration`：兼容门面，转发到 `my_vlfm`
 
 ## 处理链路
 1. `LanguageParser`
